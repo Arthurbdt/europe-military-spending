@@ -8,10 +8,10 @@ import plotly.express as px
 import pandas as pd
 
 # ---------- Prepare data for dashboard ----------
-data = pd.read_csv('europe_spending.csv')
+data = pd.read_csv('clean_data.csv')
 
 # slider data
-labels = data.columns.values[2:]
+labels = data['Year'].unique()
 marks = {i: str(labels[i]) for i in range(0, len(labels), 2)}
 
 # dropdown options
