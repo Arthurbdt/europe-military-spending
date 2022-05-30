@@ -5,7 +5,7 @@ import numpy as np
 country_list = ['Albania', 'Austria', 'Belarus', 'Belgium', 
     'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus',
     'Czechia', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany',
-    'Greece', 'Hungary', 'Ireland', 'Italy', 'Kosovo', 'Latvia'
+    'Greece', 'Hungary', 'Ireland', 'Italy', 'Kosovo', 'Latvia',
     'Lithuania', 'Luxembourg', 'Malta', 'Moldova', 'Montenegro',
     'Netherlands', 'North Macedonia', 'Norway',  'Poland', 'Portugal',
     'Romania', 'Russia', 'Serbia', 'Slovakia', 'Slovenia', 'Spain',
@@ -20,10 +20,11 @@ data = data.melt(
     var_name = 'Year',
     value_name = 'Pct_gdp')
 
-dict_replace = {'xxx': np.nan, '...': np.nan}
+replacements = {'xxx': np.nan, '...': np.nan}
 
-data = data.replace(dict_replace)
+data = data.replace(replacements)
 data = data[data['Country'].isin(country_list)].reset_index(drop=True)
+data['Pct_gdp'] = data['Pct_gdp'].str.rstrip("%").astype(float)
 
 data.to_csv('clean_data.csv')
 
