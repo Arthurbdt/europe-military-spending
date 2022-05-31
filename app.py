@@ -4,21 +4,20 @@ Simple first app where the data from 2022 is displayed on a map
 
 from dash import Dash, dcc, Output, Input
 import dash_bootstrap_components as dbc
-from matplotlib.pyplot import figimage
 import plotly.express as px
 import pandas as pd
 
 # ---------- Prepare data for dashboard ----------
-data = pd.read_csv('clean_data.csv')
+data = pd.read_csv('.\datasets\clean_data.csv')
 
 # slider data
 labels = data['Year'].unique()
 marks = {i: str(labels[i]) for i in range(0, len(labels), 2)}
 
 # create measures options for dropdown menu
-dropdown_options = [{'label': 'Percentage of GDP', 'value': 'percent_gdp'},
-                    {'label': 'US dollars per capita', 'value': 'usd_per_capita'},
-                    {'label': 'US dollars', 'value': 'usd'}]
+dropdown_options = [{'label': 'Percentage of GDP', 'value': 'Percent_gdp'},
+                    {'label': 'US dollars (2021)', 'value': '2021_usd'},
+                    {'label': 'US dollars (2021) per capita', 'value': '2021_usd_per_capita'}]
 
 # ---------- Create dashboard components ----------
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -30,9 +29,9 @@ title = dcc.Markdown(
         [Source: SIPRI Military Expenditure Database](https://www.sipri.org/databases/milex)
 
         Here will be the explanation of all possible dropdown options:
-        - *Percentage of GDP*: lorem ipsum et spiritus sancta
-        - *US dollars per capita*: nove sed non-nova
-        - *US dollars: constant dollar*: insert definition
+        - *Percentage of GDP*: tbd
+        - *US dollars (2021) per capita*: tbd
+        - *US dollars (2021):*: tbd
         '''
         )
 
@@ -44,8 +43,8 @@ time_series = dcc.Graph(figure = {})
 year_slider = dcc.Slider(min = 0, max = 30, step = None, 
                     marks = marks, value = 30, 
                     vertical = True, verticalHeight = 550)
-measure_dropdown = dcc.Dropdown(id = 'my-dpdn', multi = False, 
-                                value = 'percent_gdp', options = dropdown_options)
+measure_dropdown = dcc.Dropdown(id = 'my-dpdn', multi = False, clearable = False, 
+                                value = 'Percent_gdp', options = dropdown_options)
 
 # ---------- Create dashboard layout ----------
 app.layout = dbc.Container([
@@ -73,10 +72,11 @@ app.layout = dbc.Container([
 
 # ---------- Create application callback ----------
 @app.callback(
-    Output(map_europe, 'figure'),
-    Input(year_slider, 'value')
+    Output(map_europe, 'figure'),       # update map of europe
+    Input(year_slider, 'value'),        # year selected on slider
+    Input(measure_dropdown, 'value')    # measure selected on dropdown menu
 )
-def update_map(period):
+def update_map(period, measure):
     # select sample of data
     target_year = int(marks[period])
     sample = data[data['Year'] == target_year]
@@ -88,24 +88,27 @@ def update_map(period):
                         scope = "europe",
                         height =550,
                         width = 1100,
-                        color = 'Pct_gdp',
+                        color = measure,
                         color_continuous_scale='ylgnbu')
     fig.update_layout(margin=dict(t=10, b=0, l=0, r=0))
     return fig
 
 @app.callback(
-    Output(time_series, 'figure'),
-    Input(map_europe, 'clickData')
+    Output(time_series, 'figure'),      # update time series chart
+    Input(map_europe, 'clickData'),     # country selected on map
+    Input(measure_dropdown, 'value')    # measure selected on dropdown menu  
 )
-def update_ts(input):
-    # calculate something
-    area = input['points'][0]['location']
-    sample = data[data['Country']==area]
-
+def update_ts(click, measure):
+    if click:
+        # calculate something
+        area = click['points'][0]['location']
+        sample = data[data['Country']==area]
+    else:
+        sample = data
     # update chart
     fig = px.line(data_frame = sample, 
                 x = 'Year', 
-                y = 'Pct_gdp',
+                y = measure,
                 color = 'Country',
                 height = 550)
 

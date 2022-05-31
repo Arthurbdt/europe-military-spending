@@ -1,3 +1,4 @@
+''' Insert description of module '''
 import pandas as pd
 import numpy as np
 
@@ -9,24 +10,43 @@ country_list = ['Albania', 'Austria', 'Belarus', 'Belgium',
     'Lithuania', 'Luxembourg', 'Malta', 'Moldova', 'Montenegro',
     'Netherlands', 'North Macedonia', 'Norway',  'Poland', 'Portugal',
     'Romania', 'Russia', 'Serbia', 'Slovakia', 'Slovenia', 'Spain',
-    'Sweden', 'Switzerland', 'Ukraine', 'United Kingdom']
-
-# load raw data
-data = pd.read_csv('share_of_gdp.csv')
-
-# pivot yera columns into rows
-data = data.melt(
-    id_vars = ['Area', 'Country'],
-    var_name = 'Year',
-    value_name = 'Pct_gdp')
-
+    'Sweden', 'Switzerland', 'Ukraine', 'United Kingdom', 'Iceland']
+    
+# record names of variables, datasets and labels
+path = '.\\datasets\\'
+measures = ['Percent_gdp', '2021_usd', '2021_usd_per_capita']
+files = ['share_of_gdp.csv', '2021_usd.csv', '2021_usd_per_capita.csv']
 replacements = {'xxx': np.nan, '...': np.nan}
 
-data = data.replace(replacements)
-data = data[data['Country'].isin(country_list)].reset_index(drop=True)
-data['Pct_gdp'] = data['Pct_gdp'].str.rstrip("%").astype(float)
+def clean_dataframe(file_name, measure_name):
+    '''
+    Applies cleaning rules to input dataset
+    '''
+    data = pd.read_csv(path + file_name)
+    # pivot year columns into rows
+    data = data.melt(    
+        id_vars = ['Area', 'Country'],
+        var_name = 'Year',
+        value_name = measure_name)
+    # apply cleaning rules to columns
+    data = data.replace(replacements) # replace special characters
+    data = data[data['Country'].isin(country_list)].reset_index(drop=True) # restrict list of countries
+    # convert percentage string into float
+    if measure_name == 'Percent_gdp':
+        data['Percent_gdp'] = data['Percent_gdp'].str.rstrip("%").astype(float)
+    return data
 
-data.to_csv('clean_data.csv')
+# clean and merge datasets
+df = pd.DataFrame()
+for file, measure in zip(files, measures):
+    dataset = clean_dataframe(file, measure)
+    if df.empty:
+        df = dataset
+    else:
+        df = pd.merge(df, dataset[['Country', 'Year', measure]], how = 'left', on = ['Country', 'Year'])
+
+# save final dataset
+df.to_csv('.\datasets\clean_data.csv')
 
 
 
