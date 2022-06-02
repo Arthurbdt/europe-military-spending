@@ -33,7 +33,13 @@ def clean_dataframe(file_name, measure_name):
     data = data[data['Country'].isin(country_list)].reset_index(drop=True) # restrict list of countries
     # convert percentage string into float
     if measure_name == 'Percent_gdp':
-        data['Percent_gdp'] = data['Percent_gdp'].str.rstrip("%").astype(float)
+        data[measure_name] = data[measure_name].str.rstrip("%").astype(float)
+    # convert USD '000s into millions
+    elif measure_name == '2021_usd':
+        data[measure_name] = data[measure_name].astype(float) / 1000.
+    # convert data to numeric
+    elif measure_name == '2021_usd_per_capita':
+        data[measure_name] = data[measure_name].astype(float)
     return data
 
 # clean and merge datasets
