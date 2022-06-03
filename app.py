@@ -18,8 +18,8 @@ marks = {i: str(labels_year[i]) for i in range(0, len(labels_year), 2)}
 
 # create measures options for dropdown menu
 dropdown_options = [{'label': 'Percentage of GDP', 'value': 'Percent_gdp'},
-                    {'label': 'US dollars (2021)', 'value': '2021_usd'},
-                    {'label': 'US dollars (2021) per capita', 'value': '2021_usd_per_capita'}]
+                    {'label': 'Constant US dollars', 'value': 'constant_usd'},
+                    {'label': 'US dollars per capita', 'value': 'usd_per_capita'}]
 
 # ---------- Create dashboard components ----------
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -30,11 +30,11 @@ title = dcc.Markdown(
 
         [Source: SIPRI Military Expenditure Database](https://www.sipri.org/databases/milex)
 
-        This web application visualizes the military spending of European countries since the end of the Cold War though
-        one of three variables:
+        This web application visualizes the military spending of European countries since the end of the Cold War through
+        three variables:
         - **Percentage of GDP:** percentage of gross domestic product allocated to military spending
-        - **US dollars (2021):** current dollars allocated to military spending (in $B)
-        - **US dollars (2021) per capita:** constant dollars per country inhabitant allocated to military spending 
+        - **US dollars:** military expenditure (in $Bn) expressed in constant dollars of 2020
+        - **US dollars per capita:** current dollars per country inhabitant allocated to military spending 
 
         Select the measure of interest in the dropdown menu to update all figures. You can visualize the evolution
         of military spending over time by changing dates on the slider. Clicking on a country will filter out all
@@ -121,8 +121,6 @@ def update_ts(click, measure):
     if measure == 'Percent_gdp':
         fig.add_shape(type = 'line', line_color = 'red', line_width = 3,
             y0 = 2.0, y1 = 2.0, x0 = '1991', x1 = '2021', yref = 'y')
-        fig.add_shape(type = 'line', line_color = 'black', line_width = 0,
-            y0 = 0, y1 = 0, x0 = '1991', x1 = '2021', yref = 'y')
     # return graph
     return fig
 

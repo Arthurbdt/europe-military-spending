@@ -1,4 +1,4 @@
-''' Insert description of module '''
+''' Clean, prepare and merge all 3 datasets into one for visualization '''
 import pandas as pd
 import numpy as np
 
@@ -14,8 +14,8 @@ country_list = ['Albania', 'Austria', 'Belarus', 'Belgium',
     
 # record names of variables, datasets and labels
 path = '.\\datasets\\'
-measures = ['Percent_gdp', '2021_usd', '2021_usd_per_capita']
-files = ['share_of_gdp.csv', '2021_usd.csv', '2021_usd_per_capita.csv']
+measures = ['Percent_gdp', 'constant_usd', 'usd_per_capita']
+files = ['share_of_gdp.csv', 'constant_usd.csv', 'usd_per_capita.csv']
 replacements = {'xxx': np.nan, '...': np.nan}
 
 def clean_dataframe(file_name, measure_name):
@@ -34,11 +34,11 @@ def clean_dataframe(file_name, measure_name):
     # convert percentage string into float
     if measure_name == 'Percent_gdp':
         data[measure_name] = data[measure_name].str.rstrip("%").astype(float)
-    # convert USD '000s into millions
-    elif measure_name == '2021_usd':
+    # convert millions into billions
+    elif measure_name == 'constant_usd':
         data[measure_name] = data[measure_name].astype(float) / 1000.
     # convert data to numeric
-    elif measure_name == '2021_usd_per_capita':
+    elif measure_name == 'usd_per_capita':
         data[measure_name] = data[measure_name].astype(float)
     return data
 
