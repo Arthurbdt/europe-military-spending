@@ -11,7 +11,7 @@ This web application explores a subset of SIPRI's military expenditure dataset.
 ## 1. Introduction
 
 ### 1.1. Interest
-The annexion of Crimea by Russia in 2014 and, more recently, Russia's invasion of the Ukrainian territory on February 24th 2022 has brought back war to the European continent for the first time since the mid-90s.
+The annexion of Crimea by Russia in 2014 and, more recently, Russia's invasion of the Ukrainian territory on February 24th 2022 brought back war to the European continent for the first time since the mid-90s.
 
 The purpose of this web application is to assess the amount of resources allocated to military spending in Europe after 1991. It aims at answering questions like:
 - Which countries are the main military powers in Europe?
@@ -77,6 +77,7 @@ Many smaller economies allocate a larger share of their GDP to military expendit
 ![Spending per gdp](images/map_gdp_2021.png)
 
 **c. Per capita**
+
 The last view available in the application is military expenditure expressed as USD per inhabitant. The ranking of top military spenders significantly changes again for the year 2021:
 1. Norway - $1,509 per capita
 2. Finland - $1,064
@@ -97,13 +98,21 @@ While not all countries reduced their military expenditure in the same proportio
 
 **b. From 9/11 to the 2008 economic crisis**
 
+The terrorist attacks of September 2001 put an end to the period of decrease in military investments for many countries. Realizing that new security risks were threatening them, the UK increased its military expenditure by 25% in constant dollars between 2001 and 2008. France increased its spending by 7% over the same period.
+
 **c. After 2008**
+
+The economic crisis of 2008 forced countries to reduce military spending to limit public debt. Italy, for example, decreased its spending by 28% from 2008 to 2015.
 
 ### 3.3. Ukrainian conflict
 
 **a. Russia vs Ukraine**
 
-**b. Baltic states**
+The data provided by SIPRI gives some insights on the balance of military power between Russia and Ukraine. Both countries in 2021 were allocating a large share of their GDP to military (4.1% and 3.2% respectively).
 
-**c. NATO**
+In constant dollars however the gap is most significant as Russia's spending is about 15 times higher than Ukraine's.
+
+**b. Russia vs NATO**
+
+Russia's military might has to be put in perspective by looking at other NATO countries. Its spending is on par with that of the UK and about 18% higher than France's.
 
